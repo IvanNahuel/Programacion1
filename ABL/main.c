@@ -285,6 +285,15 @@ void ModificarEmpleado (eEmpleado vec[],int tam, int legajo){
             }
         }
 }
+void OrdenarEmpleados (eEmpleado vec[], int tamaño){
+int AuxiliarLegajo;
+char AuxiliarNombre [20];
+char AuxiliarSexo;
+float AuxiliarSueldo;
+
+
+
+}
 
 
 
