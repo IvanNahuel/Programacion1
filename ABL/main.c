@@ -1,8 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define TAM 50
+#define TAMSEC 5
 
 int menu();
+typedef struct{
+int id;
+char nombre[20];
+
+}eSector;
+
 
 
 typedef struct{
@@ -18,6 +25,7 @@ int legajo;
 char nombre [20];
 char sexo;
 float sueldo;
+int sector;
 int isEmpty;
 eFecha fechaIngreso;
 
@@ -28,6 +36,8 @@ void inicializarEmpleados(eEmpleado vec[],int tam);
 
 int main()
 {
+eSector sec[]= {{1,"ventas"},{2,"Compras"},{3,"Contabilidad"},{4,"Recursos"},{5,"Sistemas"}};
+
 int salir = 0;
 int indexLibre;
 int LegajoAEliminar;
@@ -45,7 +55,7 @@ do{
     switch (menu()){
     case 1:
         printf("Alta \n\n");
-        altaEmpleados(gente,TAM);
+        altaEmpleados(gente,TAM,sec);
         break;
     case 2:
         printf("Baja \n\n");        //pido legajo, coomparo legajo que si existe, de existir PREGUNTO de que si
@@ -68,7 +78,7 @@ do{
 
        for (int i = 0; i< TAM; i++){
             if (gente[i].isEmpty!=1){               //si gente INDEX es distinto a 1 imprimimelo
-                ImprimirEmpleados(gente[i]);
+                ImprimirEmpleados(gente[i],sec[i]);
             }
        }
         break;
@@ -92,6 +102,7 @@ int menu(){
 //system("cls");
 int opcion;
 
+
 printf("1-Alta \n");
 printf("2-Baja \n");
 printf("3-Modificar \n");
@@ -112,9 +123,11 @@ for (int i =0 ; i<tam ; i++){
     }
 }
 
-void ImprimirEmpleados (eEmpleado emp){
+void ImprimirEmpleados (eEmpleado emp,eSector sec){
 
 printf(".        %s                 %d                  %.2f                 %c         .\n",emp.nombre,emp.legajo,emp.sueldo,emp.sexo);
+printf("\n\n su sector es %s",sec.nombre);
+
 }
 
 int buscarLibre (eEmpleado vec[], int tam){
@@ -141,7 +154,7 @@ int indice =-1;
     }
     return indice;
 }
-void altaEmpleados(eEmpleado vec[],int tam){
+void altaEmpleados(eEmpleado vec[],int tam,eSector sec[]){
     eEmpleado nuevoEmpleado;
     int indice;
     int libre;          //indice libre en la funcion buscar libre
@@ -160,7 +173,7 @@ void altaEmpleados(eEmpleado vec[],int tam){
     if (libre !=-1){
         printf("ya existe una persona con ese legajo \n\n");
 
-        ImprimirEmpleados(vec[libre]);
+        ImprimirEmpleados(vec[libre],sec[libre]);
     } else {
     nuevoEmpleado.isEmpty =0;
     nuevoEmpleado.legajo = legajo;
@@ -176,6 +189,17 @@ void altaEmpleados(eEmpleado vec[],int tam){
     printf("ingrese sueldo: ");
     scanf("%f",&nuevoEmpleado.sueldo);
 
+    print("\n ingrese sector");
+
+    printf("ingrese sector correspondiente \n");
+    printf("1-Ventas \n");
+    printf("2-Compras \n");
+    printf("3-Contabilidad \n");
+    printf("4-RRHH \n");
+    printf("5-Sistemas \n");
+
+    scanf("%d",&sec[libre].id);         //ESTO SETTEA EL ID
+
     printf("carga de datos Exitosa \n");
 
     //printf("ingrese fecha de ingrese d m a: ");
@@ -186,7 +210,6 @@ void altaEmpleados(eEmpleado vec[],int tam){
 }
 void BajarEmpleado (eEmpleado vec[],int tam, int legajo){ //
     int respuesta=2;
-
 
         for (int i = 0 ;i<tam; i++){
 
@@ -224,6 +247,7 @@ void BajarEmpleado (eEmpleado vec[],int tam, int legajo){ //
 void ModificarEmpleado (eEmpleado vec[],int tam, int legajo){
         int respuesta;
         int respuestaModificacionAOtro;
+        int sectorsito;
 
         for (int i = 0;i<tam;i++){
             if (!(vec[i].legajo==legajo && vec[i].isEmpty==0)){
@@ -271,6 +295,8 @@ void ModificarEmpleado (eEmpleado vec[],int tam, int legajo){
                         printf("\n ingrese nuevo sueldo:");
                         scanf("%f",&vec[i].sueldo);
 
+
+
                         printf("Se ha modificado el legajo, sexo y nombre \n");
                     } else {
                     printf("Solo se ha modificado el nombre: %s del legajo: %d \n",vec[i].nombre, vec[i].legajo);
@@ -285,6 +311,20 @@ void ModificarEmpleado (eEmpleado vec[],int tam, int legajo){
             }
         }
 }
+int menuSectores(){
+    int retorno;
+    printf("ingrese sector correspondiente \n");
+    printf("1-Ventas \n");
+    printf("2-Compras \n");
+    printf("3-Contabilidad");
+    printf("4-RRHH");
+    printf("5-Sistemas");
+
+    scanf("%d",&retorno);
+
+return retorno;
+}
+/*
 void OrdenarEmpleados (eEmpleado vec[], int tamaño){
 int AuxiliarLegajo;
 char AuxiliarNombre [20];
@@ -294,7 +334,7 @@ float AuxiliarSueldo;
 
 
 }
-
+*/
 
 
 
