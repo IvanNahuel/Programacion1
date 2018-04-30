@@ -58,6 +58,7 @@ int main()
                  ImprimirPersonas(persona,TAM);
                 break;
             case 4:
+                GraficoEdades(persona,TAM);
                 break;
             case 5:
                 seguir = 'n';
@@ -180,12 +181,49 @@ char auxNombre[20];
                 }
             }
        }        */
+                printf("\n|              Nombre                      |      Edad   |   DNI      | \n");
         for (int i =0; i<tam; i++){
             if (vec[i].estado==0){
-                printf("%25s                                  %2d        %8d \n",vec[i].nombre, vec[i].edad, vec[i].dni);
+                printf("|%25s                 |      %2d     |   %8d |\n",vec[i].nombre, vec[i].edad, vec[i].dni);
             }
         }
+                printf("----------------------------------------------------------------------------");
 }
+void GraficoEdades(EPersona vec[],int tam) {
+    int menorA18 =0;
+    int entre19Y35 =0;
+    int mayorA35 =0;
+
+printf("\n------------------------------------Grafico de edades---------------------------------------------------------\n\n\n\n\n\n");
+    for (int i=0;i<tam; i++){
+        if (vec[i].edad<=18 && vec[i].estado ==0){
+            menorA18++;
+        }else if (vec[i].edad >18 && vec[i].edad <=35 && vec[i].estado ==0){
+            entre19Y35++;
+        } else if (vec[i].edad >35 && vec[i].estado ==0) {
+            mayorA35++;
+        }
+    }
+    for (int i=0;i<tam;i++){
+        if (vec[i].estado==0){
+            if (menorA18>0){
+                printf(" *");
+                menorA18--;
+            }
+            if (entre19Y35>0){
+                printf("             *");
+                entre19Y35--;
+            }
+            if (mayorA35>0){
+                printf("                         *");
+                mayorA35--;
+            }
+            printf("\n");
+        }
+    }
+        printf(" <18       >19<35        >35");
+}
+
 
 
 
