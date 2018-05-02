@@ -193,6 +193,7 @@ void GraficoEdades(EPersona vec[],int tam) {
     int menorA18 =0;
     int entre19Y35 =0;
     int mayorA35 =0;
+    char asterisco = '*';
 
 printf("\n------------------------------------Grafico de edades---------------------------------------------------------\n\n\n\n\n\n");
     for (int i=0;i<tam; i++){
@@ -207,15 +208,15 @@ printf("\n------------------------------------Grafico de edades-----------------
     for (int i=0;i<tam;i++){
         if (vec[i].estado==0){
             if (menorA18>0){
-                printf(" *");
+                printf("%1c",asterisco);
                 menorA18--;
             }
             if (entre19Y35>0){
-                printf("             *");
+                printf("             %1c",asterisco);
                 entre19Y35--;
             }
             if (mayorA35>0){
-                printf("                         *");
+                printf("                         %1c",asterisco);
                 mayorA35--;
             }
             printf("\n");
