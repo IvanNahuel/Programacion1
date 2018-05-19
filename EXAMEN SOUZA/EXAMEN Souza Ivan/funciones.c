@@ -1,7 +1,10 @@
+//#include <stdio.h>
+//#include <stdlib.h>
 #define TAM 50
 
 int Opciones(){
     int opcion;
+
 
     printf("\n1-Alta \n");
     printf("2-Baja \n");
@@ -13,8 +16,8 @@ int Opciones(){
     scanf("%d",&opcion);
 
     return opcion;
-
 }
+
 
 void inicializarProductos(eProductos vec[],int tam){
 
@@ -23,28 +26,19 @@ for (int i =0 ; i<tam ; i++){
     }
 }
 
-void AltasProductos(eProductos pro[],int tam){
+void AltasProductos(eProductos pro[],int tam,eProveedores prove[]){
         eProductos nuevoProducto;
         int indice;
-        int libre;
         int cod;
+        int codProve;
 
     indice = buscarLibre(pro, tam);
 
     if (indice ==-1){
         printf("el sistema esta lleno \n");
     } else {
-        printf("Ingrese codigo de producto \n");
-        scanf("%d",&cod);
-
-        libre = buscarProducto(pro,TAM,cod);
-
-        if (libre !=-1){
-            printf("ya existe un producto con ese Codigo \n\n");
-        } else {
-
         nuevoProducto.IsEmpty = 0;
-        nuevoProducto.codigoProducto = cod;
+        nuevoProducto.codigoProducto = indice;
 
         printf("Ingrese Descripcion del producto: ");
         fflush(stdin);
@@ -56,11 +50,26 @@ void AltasProductos(eProductos pro[],int tam){
         printf("\ningrese cantidad: ");
         scanf("%d",&nuevoProducto.cantidad);
 
-        pro[indice]=nuevoProducto;
+        MostrarProveedores(prove);
 
+        printf("\n\ningrese codigo de proveedor: ");
+        scanf("%d",&nuevoProducto.IdProvedor);
+
+        while (!(nuevoProducto.IdProvedor>-1 && nuevoProducto.IdProvedor<6)){
+            printf("\nERROR Ingrese el codigo de proveedor correcto: ");
+            scanf("%d",&nuevoProducto.IdProvedor);
+        }
+        pro[indice]=nuevoProducto;
+        printf ("!!Alta Exitosa!!");
         }
     }
+void MostrarProveedores (eProveedores vec[]){
+            printf("Codigo proveedor            Descripcion\n");
+        for (int j=0; j<6;j++){
+            printf("%2d\t\t%10s\n",vec[j].codigoProveedor,vec[j].Descripcion);
+        }
 }
+
 int buscarLibre (eProductos vec[], int tam){
    int indice = -1;
 
@@ -88,16 +97,16 @@ int indice =-1;
 
 void BajarProducto (eProductos vec[],int tam, int Codigo){ //
     int respuesta=2;
-
+        //printf("el codigo a eliminar es %d",Codigo);
         for (int i = 0 ;i<tam; i++){
 
-            if (!(vec[i].codigoProducto==Codigo && vec[i].IsEmpty==0)){
+            if (( vec[i].IsEmpty==0 && vec[Codigo].codigoProducto!=Codigo )){
                 printf("no existe ningun producto con ese codigo \n");
                 break;
             }
-            else {
+            else if (vec[i].codigoProducto==Codigo &&vec[i].IsEmpty==0){
                 printf("desea eliminar a : %s \n",vec[i].Descripcion);
-                printf("1-Si \n ");
+                printf("1-Si \n");
                 printf("2-No \n");
                 scanf("%d",&respuesta);
 
@@ -118,19 +127,20 @@ void BajarProducto (eProductos vec[],int tam, int Codigo){ //
                     break;
                 }
                 break;
+        } else if  ( vec[i].IsEmpty==1&& vec[Codigo].codigoProducto!=Codigo ){
+            printf("No se ha encontrado ese codigo, tal vez ya fue eliminado o nunca fue creado");
         }
     }
 }
 
 void ModificarProducto (eProductos vec[],int tam, int codigo){
         int respuesta;
-
         for (int i = 0;i<tam;i++){
-            if (!(vec[i].codigoProducto==codigo && vec[i].IsEmpty==0)){
+            if (( vec[i].IsEmpty==0 && vec[codigo].codigoProducto!=codigo )){
                 printf("\n no existe ningun producto con ese codigo \n");
                 break;
             }
-            else {
+            else if (vec[i].codigoProducto==codigo &&vec[i].IsEmpty==0){ {
                 printf("\n Desea modificar los datos de: %s \n",vec[i].Descripcion);
                 printf("1- Si \n");
                 printf("2- No \n");
@@ -166,6 +176,17 @@ void ModificarProducto (eProductos vec[],int tam, int codigo){
                 break;
             }
            // break;
+        }
+    }
+}
+
+void listarProductos(eProductos vec[],int tam){
+            printf("\n-------------------------------------------------------------------------------------\n");
+            printf("  Codigo           Descripcion            Importe         Stock\n");
+        for (int i=0; i<tam;i++){
+            if (vec[i].IsEmpty==0){
+                printf("%2d\t%20s\t\t %4.2f\t\t %3d\t\n",vec[i].codigoProducto,vec[i].Descripcion,vec[i].importe,vec[i].cantidad);
+            }
         }
 }
 
@@ -221,42 +242,101 @@ void Informar(eProductos vec[],int tam){
         printf("\n---------------------------Fin Informes------------------------------------------\n");
 }
 
-void listar(eProductos vec[],int tam){
+void listar(eProductos vec[],int tam,eProveedores prov[]){
 eProductos Aux;
 eProductos auxInt;
 int promedio;
 int contador=0;
 int acum=0;
+int AuxiliarIdProv;
 
-printf("Descripcion--------------Codigo-----------Importe-----------------Cantidad\n");
+OrdenarImpresion(vec, tam);
 
-printf("\nProductos que en cantidad son menor o igual a 10\n");
+
+
+printf("\n\n\nProductos que en cantidad son menor o igual a 10\n");
+
+printf("\n\tDescripcion--------------Codigo-----------Importe-----------------Cantidad\n");
     for (int i=0;i<tam;i++){
         if (vec[i].IsEmpty==0 && vec[i].cantidad<=10){
-            printf("%s             %d             %.3f            %d\n",vec[i].Descripcion, vec[i].codigoProducto, vec[i].importe, vec[i].cantidad);
-        } else if  (vec[i].IsEmpty==0 && vec[i].cantidad >10){
-            printf("%s             %d             %.3f            %d\n",vec[i].Descripcion, vec[i].codigoProducto, vec[i].importe, vec[i].cantidad);
+            printf("%20s \t\t %2d \t\t  %3.3f \t\t %3d\n",vec[i].Descripcion, vec[i].codigoProducto, vec[i].importe, vec[i].cantidad);
+        }
+    }
+printf("\n\n\nProductos que en cantidad son Mayores a 10\n");
+
+printf("\n\tDescripcion--------------Codigo-----------Importe-----------------Cantidad\n");
+    for (int i=0;i<tam;i++){
+         if  (vec[i].IsEmpty==0 && vec[i].cantidad >10){
+            printf("%20s \t\t %2d \t\t  %3.3f \t\t %3d\n",vec[i].Descripcion, vec[i].codigoProducto, vec[i].importe, vec[i].cantidad);
         }
     }
 
-    printf("------------------------------------------------------------------------------------------------------------\n");
-
-
-    for (int i =0; i< tam; i++){                    //CON ESTE FOR SACO EL PUNTO A
+    for (int i =0; i< tam; i++){
         if (vec[i].IsEmpty==0){
             contador++;
             acum = vec[i].importe+ acum;
         }
     }
     promedio = acum/contador;
+    printf("\n-------------Productos Menor al importe------------------------------------\n");
+    printf("\n\n\tDescripcion--------------Codigo-----------Importe-----------------Cantidad\n");
     for (int i =0;i<tam;i++){
         if (vec[i].IsEmpty==0 && vec[i].importe<promedio){ //menor
-            printf("\n-------------Productos Menor al importe------------------------------------\n");
-            printf("\n%s             %d             %.3f            %d",vec[i].Descripcion, vec[i].codigoProducto, vec[i].importe, vec[i].cantidad);
-        } else if (vec[i].IsEmpty==0 && vec[i].importe>promedio){
-            printf("\n-------------Productos Mayor al importe------------------------------------\n");
-            printf("\n%s             %d             %.3f            %d",vec[i].Descripcion, vec[i].codigoProducto, vec[i].importe, vec[i].cantidad);
+             printf("%20s \t\t %2d \t\t  %3.3f \t\t %3d\n",vec[i].Descripcion, vec[i].codigoProducto, vec[i].importe, vec[i].cantidad);
         }
     }
+    printf("\n-------------Productos Mayor al importe--------------------------------------\n");
+    printf("\n\nDescripcion--------------Codigo-----------Importe-----------------Cantidad--\n");
+        for (int i =0;i<tam;i++){
+            if (vec[i].IsEmpty==0 && vec[i].importe>promedio){
+             printf("%20s \t\t %2d \t\t  %3.3f \t\t %3d\n",vec[i].Descripcion, vec[i].codigoProducto, vec[i].importe, vec[i].cantidad);
+        }
+    }
+
+    printf("\n--------------Proveedores de productos que en stock es menor o igual a 10----\n");
+    printf("\n\----------Proveedor-------------------------Descripcion-----------Cantidad\n");
+        for (int i=0;i<tam;i++){
+            if (vec[i].IsEmpty==0 && vec[i].cantidad<=10){
+            for (int j=0;j<6;j++){
+                if (vec[i].IdProvedor==prov[j].codigoProveedor){
+                    printf("%20s\t\t %20s\t\t %2d\n",prov[j].Descripcion,vec[i].Descripcion,vec[i].cantidad);
+                }
+            }
+        }
+    }
+    printf("\n\n");
+}
+//-----------------------------------------------------------------------------------------------------------------------------
+void OrdenarImpresion(eProductos vec[],int tam){
+    eProductos aux;
+        for (int i=0;i<tam;i++){
+            if (vec [i].IsEmpty==0)  {
+
+                for (int k=0; k<tam-1; k++){
+                    for (int j=i+1;j<tam;j++){
+
+                        if (strcmp(vec[k].Descripcion,vec[j].Descripcion)>0){
+                            aux=vec[k];
+                            vec[k]=vec[j];
+                            vec[j]=aux;
+                        } else {
+                            if (strcmp(vec[k].Descripcion,vec[j].Descripcion)==0){
+                                if (vec[k].importe<vec[j].importe){
+                                   aux=vec[k];
+                                    vec[k]=vec[j];
+                                    vec[j]=aux;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+            printf("\n\n\tDescripcion--------------Codigo-----------Importe-----------------Cantidad\n");
+        for (int m=0 ;m<tam;m++){
+            if (vec [m].IsEmpty==0)  {
+            printf("\n%20s \t\t %2d \t\t %3.3f \t\t %3d\n",vec[m].Descripcion, vec[m].codigoProducto, vec[m].importe, vec[m].cantidad);
+            }
+        }
 }
 

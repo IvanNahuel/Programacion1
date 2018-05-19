@@ -14,6 +14,7 @@ int cantidad;
 int IsEmpty;
 int IdProvedor;
 
+
 }eProductos;
 /** \brief pasa un numero entero
  *
@@ -33,7 +34,7 @@ int Opciones();
 */
 void inicializarProductos(eProductos vec[],int tam);
 
-void AltasProductos(eProductos pro[],int tam);
+void AltasProductos(eProductos pro[],int tam,eProveedores prove[]);
 
 int buscarLibre (eProductos vec[], int tam);
 
@@ -45,7 +46,7 @@ void ModificarProducto (eProductos vec[],int tam, int codigo);
 
 void Informar(eProductos vec[],int tam);
 
-void listar(eProductos vec[],int tam);
+void listar(eProductos vec[],int tam,eProveedores prov[]);
 
 
 #endif
