@@ -2,10 +2,12 @@
 //#include <stdlib.h>
 #define TAM 50
 
-int Opciones(){
+int Opciones(eProductos vec[],eProveedores prov[]){
     int opcion;
 
-
+    if (validarMenu(vec,TAM)==-1){
+        AltasProductos(vec,TAM,prov);
+    }
     printf("\n1-Alta \n");
     printf("2-Baja \n");
     printf("3-Modificar \n");
@@ -127,7 +129,7 @@ void BajarProducto (eProductos vec[],int tam, int Codigo){ //
                     break;
                 }
                 break;
-        } else if  ( vec[i].IsEmpty==1&& vec[Codigo].codigoProducto!=Codigo ){
+        }  if  ( vec[i].IsEmpty==1&& vec[i].codigoProducto!=Codigo ){
             printf("No se ha encontrado ese codigo, tal vez ya fue eliminado o nunca fue creado");
         }
     }
@@ -243,12 +245,22 @@ void Informar(eProductos vec[],int tam){
 }
 
 void listar(eProductos vec[],int tam,eProveedores prov[]){
-eProductos Aux;
-eProductos auxInt;
+eProductos AuxProductos;
+eProveedores AuxProveedores;
 int promedio;
 int contador=0;
 int acum=0;
-int AuxiliarIdProv;
+int CodidoProveedor;        //usado para mandar el codigo a la funcion que imprime los productos discriminados por proveedor
+int AuxCont[5];         //guarda
+int ContMaxCont =0;     //contador del vector
+int indiceDelCont;
+
+int ContMinCont=0;
+int indiceDelContMin;
+
+eProductos ContMaxPrecio;
+eProductos ContMinPrecio;
+int flagPrecios;
 
 OrdenarImpresion(vec, tam);
 
@@ -294,7 +306,7 @@ printf("\n\tDescripcion--------------Codigo-----------Importe-----------------Ca
     }
 
     printf("\n--------------Proveedores de productos que en stock es menor o igual a 10----\n");
-    printf("\n\----------Proveedor-------------------------Descripcion-----------Cantidad\n");
+    printf("\n\----------Proveedor-------------------------Descripcion-------------Cantidad\n");
         for (int i=0;i<tam;i++){
             if (vec[i].IsEmpty==0 && vec[i].cantidad<=10){
             for (int j=0;j<6;j++){
@@ -304,6 +316,123 @@ printf("\n\tDescripcion--------------Codigo-----------Importe-----------------Ca
             }
         }
     }
+    printf("\n---------------------------Productos por proveedores--------------------------\n");
+            for (int i=0;i<tam;i++){
+            if (vec[i].IsEmpty==0){
+
+                for (int k=0;k<tam-1;k++){
+                    for (int j=i+1;j<tam;j++){
+                        if (vec[k].IdProvedor<vec[j].IdProvedor){
+                        AuxProductos= vec[k];
+                        vec[k]=vec[j];
+                        vec[j]=AuxProductos;
+
+
+
+                        }
+                    }
+                }
+            }
+        }
+            for  (int i=0;i<tam;i++){
+                if (vec[i].IsEmpty==0){
+                printf("\n%20s\t\t%d\t\t%10s",vec[i].Descripcion,vec[i].IdProvedor,prov[vec[i].IdProvedor].Descripcion);
+            }
+        }
+    printf("\n----------------------------Productos por proveedor---------------------------\n");
+
+    MostrarProveedores(prov);
+
+    printf("\nIngrese el codigo de proveedor para listar sus productos: ");
+
+    scanf("%d",&CodidoProveedor);
+
+    while (!(CodidoProveedor>-1 && CodidoProveedor<6)){
+            printf("\nERROR Ingrese el codigo de proveedor correcto: ");
+            scanf("%d",&CodidoProveedor);
+    }
+    printf("\n\n");
+    ProductosPorCadaProveedor(vec,prov,CodidoProveedor);
+
+
+    //--------------------------el proveedor que mas provee productos--------------------------
+
+    for (int aux=0;aux<6;aux++){            //inicializa el vector en 0 para usarlo como contador
+        AuxCont[aux]=0;
+    }
+
+    for (int i=0;i<tam;i++){                    //cuenta y guarda en el vector los valores en su posicion
+        if (vec[i].IsEmpty==0){
+            for (int j=0;j<6;j++){
+                if (vec[i].IdProvedor==j){
+                    AuxCont[j]++;
+                }
+            }
+        }
+    }
+    for (int i=0;i<6;i++){              //guarda en un auxiliar el mas grande cargado en el vector contador
+        if (i==0){
+            ContMaxCont = AuxCont[i];
+            ContMinCont = AuxCont[i];
+        }
+        if (AuxCont[i]>ContMaxCont){
+            ContMaxCont=AuxCont[i];     //guarda el valor maximo
+        }
+        if (AuxCont[i]<ContMinCont && AuxCont[i]!=0){
+            ContMinCont=AuxCont[i];     //guarda el valor minimo y distinto a cero
+        }
+    }
+
+    for (int i=0;i<6;i++){              //GUARDA EL INDICE DEL PROVEEDOR MAS USUAL
+        if (ContMaxCont==AuxCont[i]){   //posee
+        indiceDelCont=i;                //y guarda el index del mayor
+        printf("\n\n");
+            }
+        if (ContMinCont==AuxCont[i]){   //GUARDA EL INDICE DEL PROVEEDOR MENOS USUAL
+        indiceDelContMin=i;
+        }
+    }
+        //---------------------------MAXIMO---------------------------------------
+            printf("\nEl proveedor que mas provee productos es: %s",prov[indiceDelCont].Descripcion);
+    for (int k=0;k<tam;k++){            //imprime todos los productos a los que le pertenece el mayor
+
+        if (vec[k].IsEmpty==0){;
+            if (vec[k].IdProvedor==indiceDelCont){
+                printf("\n%20s ",vec[k].Descripcion);
+            }
+        }
+    }
+        //---------------------------MINIMO----------------------------------------
+            printf("\nEl proveedor que menos productos provee es: %s",prov[indiceDelContMin].Descripcion);
+    for (int k=0;k<tam;k++){            //imprime todos los productos a los que le pertenece el mayor
+
+        if (vec[k].IsEmpty==0){;
+            if (vec[k].IdProvedor==indiceDelContMin){
+                printf("\n%20s ",vec[k].Descripcion);
+            }
+        }
+    }
+    //-----------------------------------EL PRODUCTO MAS CARO/BARATO POR PROVEEDOR---------------------
+    for (int i=0;i<tam;i++){
+        if ( vec[i].IsEmpty==0){
+            if (flagPrecios==0){
+                ContMaxPrecio=vec[i];
+                ContMinPrecio=vec[i];
+                flagPrecios=1;
+            }
+            if (vec[i].importe>ContMaxPrecio.importe){
+                ContMaxPrecio=vec[i];
+            }
+            if (vec[i].importe<ContMinPrecio.importe){
+                ContMinPrecio=vec[i];
+            }
+        }
+    }
+    printf("\n\nEl producto mas caro es: %s provisto por: %s",ContMaxPrecio.Descripcion, prov[ContMaxPrecio.IdProvedor].Descripcion);
+
+    printf("\n\nEl producto mas barato es: %s provisto por: %s",ContMinPrecio.Descripcion, prov[ContMinPrecio.IdProvedor].Descripcion);
+
+
     printf("\n\n");
 }
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -338,5 +467,22 @@ void OrdenarImpresion(eProductos vec[],int tam){
             printf("\n%20s \t\t %2d \t\t %3.3f \t\t %3d\n",vec[m].Descripcion, vec[m].codigoProducto, vec[m].importe, vec[m].cantidad);
             }
         }
+}
+int validarMenu(eProductos vec[]){
+    int resultado=-1;
+    for (int i=0;i<TAM;i++){
+        if (vec[i].IsEmpty==0){     //significa que hay un campo vacio
+            resultado =0;
+        }
+    }
+    return resultado;
+}
+void ProductosPorCadaProveedor(eProductos productos[],eProveedores proveedores[],int codigo){
+    printf("----------------Productos Provistos por %s----------------",proveedores[codigo].Descripcion);
+        for (int i=0;i<TAM;i++){
+            if (productos[i].IsEmpty==0 && productos[i].IdProvedor==codigo){
+                printf("\n\t%10s",productos[i].Descripcion);
+        }
+    }
 }
 

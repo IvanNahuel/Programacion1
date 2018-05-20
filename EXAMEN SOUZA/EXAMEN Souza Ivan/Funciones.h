@@ -24,7 +24,7 @@ int IdProvedor;
 
 */
 
-int Opciones();
+int Opciones(eProductos vec[],eProveedores prov[]);
 
 /** \brief pasa un numero entero
  *

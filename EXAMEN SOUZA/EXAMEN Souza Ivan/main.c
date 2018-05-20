@@ -18,7 +18,7 @@ int main(){
 
 
     do{
-        switch (Opciones()){
+        switch (Opciones(productos,proveedores)){
             case 1:
             printf("\n---------------------------------------Alta-------------------------------------------\n");
             AltasProductos(productos,TAM,proveedores);
@@ -28,6 +28,8 @@ int main(){
             case 2:
                 printf("\-----------------------------------Baja--------------------------------------------\n");
                 listarProductos(productos,TAM);
+
+
                 printf("Ingrese Codigo del producto que desea eliminar: ");
                 scanf("%d",&ProdEliminar);
                 BajarProducto(productos,TAM,ProdEliminar);
@@ -50,11 +52,7 @@ int main(){
                 listar(productos,TAM,proveedores);
                 break;
             }
-     while (flagIngreso==0){
-        printf("\n---------------------------------------Alta-------------------------------------------\n");
-        AltasProductos(productos,TAM,proveedores);
-        flagIngreso =1;
-        }
+
     }while(salir==0);
     return 0;
 }
