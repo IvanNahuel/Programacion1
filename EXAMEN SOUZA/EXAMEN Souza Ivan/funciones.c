@@ -50,8 +50,18 @@ void AltasProductos(eProductos pro[],int tam,eProveedores prove[]){
         printf("\nIngrese Importe: ");
         scanf("%f",&nuevoProducto.importe);
 
+        while (nuevoProducto.importe<1){
+            printf("\nError reingrese importe: ");
+            scanf("%f",&nuevoProducto.importe);
+        }
+
         printf("\ningrese cantidad: ");
         scanf("%d",&nuevoProducto.cantidad);
+
+        while (nuevoProducto.cantidad<1){
+            printf("\nError reingrese cantidad: ");
+            scanf("%d",&nuevoProducto.cantidad);
+        }
 
         MostrarProveedores(prove);
 
