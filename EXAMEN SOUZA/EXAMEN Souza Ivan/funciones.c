@@ -29,6 +29,7 @@ for (int i =0 ; i<tam ; i++){
 }
 
 void AltasProductos(eProductos pro[],int tam,eProveedores prove[]){
+    printf("\n---------------------------------------Alta-------------------------------------------\n");
         eProductos nuevoProducto;
         int indice;
         int cod;

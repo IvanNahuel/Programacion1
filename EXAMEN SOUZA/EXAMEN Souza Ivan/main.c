@@ -20,7 +20,7 @@ int main(){
     do{
         switch (Opciones(productos,proveedores)){
             case 1:
-            printf("\n---------------------------------------Alta-------------------------------------------\n");
+
             AltasProductos(productos,TAM,proveedores);
             flagIngreso =1;
                 break;
@@ -52,7 +52,6 @@ int main(){
                 listar(productos,TAM,proveedores);
                 break;
             }
-
     }while(salir==0);
     return 0;
 }
