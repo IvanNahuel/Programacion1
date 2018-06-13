@@ -75,33 +75,24 @@ int al_add(ArrayList* this, void* pElement)
 
 
     if (this!=NULL &&pElement!=NULL){       //si el array list es nulo y pElement tmb es nulo
-        //usamos el size para saber cuantos elementos tenemos agregados y ademas en la posicion actual de el array disponible
-        //--------------------------------
-        if (this->size == this->reservedSize){          //si el array esta lleno
-          /*  aux =(void**) realloc(this->pElements, sizeof(void*)*(this->reservedSize+ AL_INCREMENT));        //buscame espacio
-            if (aux!=NULL){
-                this->pElements = aux;                  //setteame pElements
-                this->reservedSize+= AL_INCREMENT;      //incrementame la reserva de memoria, mas lo incrementado
 
-            } else {                //si no hya lugar
-                flag =0;
-            }
-            */
-        //-------------------------------
-        flag = resizeUp(this);
+        if (this->size == this->reservedSize){          //si el array esta lleno
+
+        flag = resizeUp(this);      //llamame a esta funcion, retornara 0 si se agranda, -1 si da error
+        } else {                    //si no esta lleno, ala bandera aplicamela en 0
+        flag =0;
         }
 
-        if (flag==-1){      //SI HAY LUGAR
+        if (flag==0){      //si hay lugar, o si fue agrandado (los dos casos)
         *(this->pElements+this->size) = pElement;     //agrego dentro de la lista, el nuevo elemento
-        this->size++;                                   //incremente el size (espacio de memoria disponible)
-        returnAux = 0;
-            } else {
-                returnAux = -1;
+        this->size++;                                 //incremente el size (espacio de memoria disponible)
+        returnAux = 0;                                //y la funcion retorna 0
+
             }
-        } else {
+        } else {                            //si los dos punteros devolvieron NULO
         returnAux = -1;
     }
-    return returnAux;
+    return returnAux;                       //el retorno
 }
 
 /** \brief  Delete arrayList
