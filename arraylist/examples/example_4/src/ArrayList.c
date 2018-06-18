@@ -212,10 +212,6 @@ int al_set(ArrayList* this, int index,void* pElement)
         *(this->pElements+index) = pElement;        //PISARIA EL ELEMENTO, NO LO MUEVE A NINGUN SITIO
         returnAux =0;
     }
-
-
-
-
     return returnAux;
 }
 
@@ -229,11 +225,21 @@ int al_set(ArrayList* this, int index,void* pElement)
 int al_remove(ArrayList* this,int index)
 {
     int returnAux = -1;
+    int tam = al_len(this);
+
+    if (this ==NULL && index<0 || index>tam){
+        returnAux=-1;
+    } else {
+
+        for (int i=0;i<tam;i++){
+        *(this->pElements+index+i) = *(this->pElements+index+(i+1));
+        this->size--;
+        returnAux=0;
+        }
+    }
 
     return returnAux;
 }
-
-
 
 /** \brief Removes all of the elements from this list
  * \param pList ArrayList* Pointer to arrayList
