@@ -250,6 +250,16 @@ int al_clear(ArrayList* this)
 {
     int returnAux = -1;
 
+    if (this==NULL){
+        returnAux=-1;
+    }else {
+        //BAJA LOGICA O LIBERAMOS CON LA FUNCION FREE() ???
+    }
+
+
+
+
+
     return returnAux;
 }
 
@@ -263,7 +273,14 @@ int al_clear(ArrayList* this)
 ArrayList* al_clone(ArrayList* this)
 {
     ArrayList* returnAux = NULL;
+    ArrayList* Clon;
 
+    if (this==NULL){
+        returnAux = NULL;
+    } else {
+        this = Clon;
+        returnAux = Clon;
+    }
     return returnAux;
 }
 
@@ -280,6 +297,23 @@ ArrayList* al_clone(ArrayList* this)
 int al_push(ArrayList* this, int index, void* pElement)
 {
     int returnAux = -1;
+    int tam;
+    tam = al_len(this);
+
+    if (this==NULL &&  index<0 || index>tam && pElement ==NULL){
+        returnAux=-1;
+    } else {
+        if (this->size == this->reservedSize){
+            resizeUp(this);
+        }
+
+        for (int i =tam; i<=index;i--){
+            *(this->pElements+i) = *(this->pElements+(i+1));
+            returnAux=0;
+        }
+    }
+
+
 
     return returnAux;
 }
