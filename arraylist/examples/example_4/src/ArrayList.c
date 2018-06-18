@@ -171,8 +171,23 @@ void* al_get(ArrayList* this, int index)
 int al_contains(ArrayList* this, void* pElement)
 {
     int returnAux = -1;
+    int tam;
 
+    tam = al_len(this);
+
+    if (this==NULL){
+        returnAux =-1;
+    } else {
+        for (int i=0; i<tam;i++){
+            if (pElement == (*(this->pElements+i)) ){
+                returnAux=1;
+                break;
+            } else {
+                returnAux=0;
+            }
+        }
     return returnAux;
+    }
 }
 
 
@@ -187,6 +202,19 @@ int al_contains(ArrayList* this, void* pElement)
 int al_set(ArrayList* this, int index,void* pElement)
 {
     int returnAux = -1;
+    int tam;
+    tam = al_len(this);
+
+
+    if (this ==NULL && index<0 || index>tam &&  pElement ==NULL){
+        returnAux=-1;
+    } else {
+        *(this->pElements+index) = pElement;        //PISARIA EL ELEMENTO, NO LO MUEVE A NINGUN SITIO
+        returnAux =0;
+    }
+
+
+
 
     return returnAux;
 }
