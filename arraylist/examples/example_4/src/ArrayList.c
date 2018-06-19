@@ -297,17 +297,13 @@ int al_push(ArrayList* this, int index, void* pElement)
     int tam;
     tam = al_len(this);
 
-    if (this==NULL &&  index<0 || index>tam && pElement ==NULL){
-        returnAux=-1;
-    } else {
+    if (this!=NULL && !(index<0 || index>tam) && pElement !=NULL){
         if (this->size == this->reservedSize){
             resizeUp(this);
         }
-
-        for (int i =tam; i<=index;i--){
-            *(this->pElements+i) = *(this->pElements+(i+1));
-            returnAux=0;
-        }
+        expand(this,index);
+        *(this->pElements+index) == pElement;
+        returnAux = 0;
     }
     return returnAux;
 }
@@ -319,9 +315,19 @@ int al_push(ArrayList* this, int index, void* pElement)
  * \param pElement void* Pointer to element
  * \return int Return (-1) if Error [pList or pElement are NULL pointer] - (index to element) if Ok
  */
-int al_indexOf(ArrayList* this, void* pElement)
+int al_indexOf(ArrayList* this, void* pElement)      //retorna el indice del elemento pasado por parametro
 {
     int returnAux = -1;
+    int tam = al_len(this);
+
+    if (this!=NULL && pElement!=NULL){
+        for (int i=0;i<tam;i++){
+            if ( *(this->pElements+i) == pElement){
+                returnAux = i;
+                break;
+            }
+        }
+    }
 
     return returnAux;
 }
@@ -332,15 +338,20 @@ int al_indexOf(ArrayList* this, void* pElement)
  * \param pList ArrayList* Pointer to arrayList
  * \return int Return (-1) if Error [pList is NULL pointer] - (0) if Not Empty - (1) if is Empty
  */
-int al_isEmpty(ArrayList* this)
+int al_isEmpty(ArrayList* this)     //detecta la cant de elementos SIZE que hay en el array list
 {
-    int returnAux = -1;
+    int returnAux = -1;         //por defecto queda como si fuera nulo
+    int tam = al_len(this);
 
+    if (this!=NULL){
+        if (tam>1){            //si es distinto a unp
+            returnAux=0;
+        }else if (tam<=0){      //si esta vacia
+            returnAux=1;
+        }
+    }
     return returnAux;
 }
-
-
-
 
 /** \brief Remove the item at the given position in the list, and return it.
  * \param pList ArrayList* Pointer to arrayList
@@ -351,6 +362,10 @@ int al_isEmpty(ArrayList* this)
 void* al_pop(ArrayList* this,int index)
 {
     void* returnAux = NULL;
+
+
+
+
 
     return returnAux;
 }
@@ -436,6 +451,14 @@ int resizeUp(ArrayList* this)
 int expand(ArrayList* this,int index)
 {
     int returnAux = -1;
+    int tam = al_len(this);
+
+    if (this!=NULL && !(index<0 && index>tam)){
+        for (int i=tam;i==index;i--){
+            *(this->pElements+(i+1)) = *( this->pElements+i);
+        }
+    returnAux =0;
+    }
 
     return returnAux;
 }
