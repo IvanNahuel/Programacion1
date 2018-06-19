@@ -264,14 +264,20 @@ int al_clear(ArrayList* this)
 ArrayList* al_clone(ArrayList* this)
 {
     ArrayList* returnAux = NULL;
-    ArrayList* Clon;
+    ArrayList* Clone;
+    void* pElements;
 
-    if (this==NULL){
-        returnAux = NULL;
-    } else {
-        this = Clon;
-        returnAux = Clon;
+    int tam = al_len(this);
+    Clone = al_newArrayList();          //creamos una nueva lista
+
+    if (this !=NULL){
+        for (int i=0;i<tam;i++){
+            pElements = al_get(this,i);
+            al_add(Clone,pElements);
+            returnAux = Clone;
+        }
     }
+
     return returnAux;
 }
 
@@ -303,9 +309,6 @@ int al_push(ArrayList* this, int index, void* pElement)
             returnAux=0;
         }
     }
-
-
-
     return returnAux;
 }
 
