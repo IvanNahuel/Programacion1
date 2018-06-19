@@ -36,7 +36,7 @@ int main(void)
         startTesting(6);
         startTesting(7);
         startTesting(8);
-        //startTesting(9);
+        startTesting(9);
         //startTesting(10);
         //startTesting(11);
         //startTesting(12);

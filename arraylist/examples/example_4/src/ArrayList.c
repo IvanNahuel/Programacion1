@@ -238,18 +238,19 @@ int al_remove(ArrayList* this,int index)
  */
 int al_clear(ArrayList* this)
 {
+    void** aux;
     int returnAux = -1;
 
-    if (this==NULL){
-        returnAux=-1;
-    }else {
-        //BAJA LOGICA O LIBERAMOS CON LA FUNCION FREE() ???
+    if (this!=NULL){
+    aux = (void**) realloc(this->pElements,sizeof(void*)*AL_INCREMENT);
+
+    if (aux!=NULL){
+       this->pElements = aux;
+       this->reservedSize = AL_INCREMENT;
+       this->size=0;
+       returnAux =0;
+        }
     }
-
-
-
-
-
     return returnAux;
 }
 
@@ -453,7 +454,7 @@ int contract(ArrayList* this,int index)
 
     if (this!=NULL){
         for (int i=index;i<tam;i++){
-            *(this->pElements+index) = *(this->pElements+(index+1));
+            *(this->pElements+index) = *(this->pElements+(index+1));        //swapeo de posiciones
             this->size--;
             returnAux=0;
             }
