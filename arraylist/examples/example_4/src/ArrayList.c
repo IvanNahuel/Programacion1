@@ -452,8 +452,8 @@ int contract(ArrayList* this,int index)
     }
 
     if (this!=NULL){
-        for (int i=0;i<tam;i++){
-            *(this->pElements+index+i) = *(this->pElements+index+(i+1));
+        for (int i=index;i<tam;i++){
+            *(this->pElements+index) = *(this->pElements+(index+1));
             this->size--;
             returnAux=0;
             }
