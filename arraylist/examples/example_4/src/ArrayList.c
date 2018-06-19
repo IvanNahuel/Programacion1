@@ -111,10 +111,6 @@ int al_deleteArrayList(ArrayList* this)
         returnAux=0;
     }
 
-
-
-
-
     return returnAux;
 }
 
@@ -205,13 +201,11 @@ int al_set(ArrayList* this, int index,void* pElement)
     int tam;
     tam = al_len(this);
 
-
-    if (this ==NULL && index<0 || index>tam &&  pElement ==NULL){
-        returnAux=-1;
-    } else {
-        *(this->pElements+index) = pElement;        //PISARIA EL ELEMENTO, NO LO MUEVE A NINGUN SITIO
+    if (this !=NULL && pElement !=NULL && !(index<0 || index >tam)){
+        (*(this->pElements+index)) = pElement;        //PISARIA EL ELEMENTO, NO LO MUEVE A NINGUN SITIO
         returnAux =0;
-    }
+        }
+
     return returnAux;
 }
 
@@ -224,23 +218,19 @@ int al_set(ArrayList* this, int index,void* pElement)
  */
 int al_remove(ArrayList* this,int index)
 {
+    int retorno;
     int returnAux = -1;
     int tam = al_len(this);
 
-    if (this ==NULL && index<0 || index>tam){
-        returnAux=-1;
+    if (this !=NULL && !(index<0 || index>tam)){
+        //returnAux=-1;
+        retorno = contract(this,index);
+        returnAux =0;
     } else {
-
-        for (int i=0;i<tam;i++){
-        *(this->pElements+index+i) = *(this->pElements+index+(i+1));
-        this->size--;
-        returnAux=0;
-        }
+        returnAux =-1;
     }
-
     return returnAux;
 }
-
 /** \brief Removes all of the elements from this list
  * \param pList ArrayList* Pointer to arrayList
  * \return int Return (-1) if Error [pList is NULL pointer]
@@ -455,6 +445,23 @@ int expand(ArrayList* this,int index)
 int contract(ArrayList* this,int index)
 {
     int returnAux = -1;
+    int tam = al_len(this);
 
-    return returnAux;
+    if (index<0 || index >tam){
+        returnAux = -1;
+    }
+
+    if (this!=NULL){
+        for (int i=0;i<tam;i++){
+            *(this->pElements+index+i) = *(this->pElements+index+(i+1));
+            this->size--;
+            returnAux=0;
+            }
+        }
+         else {
+        returnAux = -1;
+        }
+       return returnAux;
 }
+
+
