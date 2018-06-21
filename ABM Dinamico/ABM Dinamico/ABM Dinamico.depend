@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1528400652 source:c:\users\home\desktop\abm dinamico\abm dinamico\main.c
+	<stdio.h>
+	<stdlib.h>
+
