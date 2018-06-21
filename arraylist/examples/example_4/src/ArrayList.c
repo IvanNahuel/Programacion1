@@ -272,9 +272,9 @@ ArrayList* al_clone(ArrayList* this)
 
     if (this !=NULL){
         for (int i=0;i<tam;i++){
-            pElements = al_get(this,i);
-            al_add(Clone,pElements);
-            returnAux = Clone;
+            pElements = al_get(this,i);         //obtiene el elemento en la posicion
+            al_add(Clone,pElements);            //añade el elemento pasado por parametro
+            returnAux = Clone;                  //devuelve el puntero al arrayList
         }
     }
 
@@ -297,11 +297,12 @@ int al_push(ArrayList* this, int index, void* pElement)
     int tam;
     tam = al_len(this);
 
-    if (this!=NULL && !(index<0 || index>tam) && pElement !=NULL){
+    if (this!=NULL && index>=0 && index <=tam && pElement !=NULL){          //TAMPOCO TENGO IDEA DEL ERROR
         if (this->size == this->reservedSize){
             resizeUp(this);
         }
         expand(this,index);
+        //pElement = al_get(this,index);
         *(this->pElements+index) == pElement;
         returnAux = 0;
     }
@@ -362,10 +363,12 @@ int al_isEmpty(ArrayList* this)     //detecta la cant de elementos SIZE que hay 
 void* al_pop(ArrayList* this,int index)
 {
     void* returnAux = NULL;
+    int tam =al_len(this);
 
-
-
-
+    if (this!=NULL && index>=0 && index <=tam){         //NO TENGO IDEA POR QUE TIRA ERROR
+        returnAux = al_get(this,index);
+        contract(this,index);
+    }
 
     return returnAux;
 }
@@ -382,7 +385,22 @@ void* al_pop(ArrayList* this,int index)
 ArrayList* al_subList(ArrayList* this,int from,int to)
 {
     void* returnAux = NULL;
+    ArrayList* copia;
+    void* pElement;
+    int tam = al_len(this);
 
+    copia = al_newArrayList();
+
+
+    if (this!=NULL && copia !=NULL){
+        if (from>=0 && from<tam && to >=0 && to<=tam) {
+            for (int i=from; i<to;i++){
+                pElement = al_get(this,i);
+                al_add(copia,pElement);
+                returnAux = copia;
+            }
+        }
+    }
     return returnAux ;
 }
 
@@ -396,9 +414,20 @@ ArrayList* al_subList(ArrayList* this,int from,int to)
  * \return int Return (-1) if Error [pList or pList2 are NULL pointer]
  *                  - (0) if Not contains All - (1) if is contains All
  */
-int al_containsAll(ArrayList* this,ArrayList* this2)
+int al_containsAll(ArrayList* this,ArrayList* this2)        //NO ENTIENDO UNA GOMA
 {
     int returnAux = -1;
+    int tam = al_len(this);
+
+    if (this!=NULL && this2 !=NULL){
+        for (int i=0;i<tam;i++){
+            if (this2->pElements == this->pElements){
+                returnAux = 0;
+            } else {
+                returnAux = 1;
+            }
+        }
+    }
 
     return returnAux;
 }
@@ -452,14 +481,21 @@ int expand(ArrayList* this,int index)
 {
     int returnAux = -1;
     int tam = al_len(this);
+    int res;
 
-    if (this!=NULL && !(index<0 && index>tam)){
-        for (int i=tam;i==index;i--){
-            *(this->pElements+(i+1)) = *( this->pElements+i);
+    if (this!=NULL){
+        if (index>=0 && index <tam){
+            if (this->reservedSize == tam){
+                res = resizeUp(this);
+            }if (res==0){
+                for (int i=tam;i>index;i--){
+                    *(this->pElements+i)=*(this->pElements+(i-1));
+                }
+                this->size++;
+                returnAux=0;
+            }
         }
-    returnAux =0;
     }
-
     return returnAux;
 }
 
